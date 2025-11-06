@@ -1,28 +1,32 @@
 // ===================== CONFIGURAÇÃO SUPABASE =====================
 const SUPABASE_URL = "https://xsetrmgmynmrebiwkkya.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzZXRybWdteW5tcmViaXdra3lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyMDQyOTEsImV4cCI6MjA3Nzc4MDI5MX0.DFs9aID-cp693Ow5cwE-GF9cGLtIZQ761z2cCp8dlxw";
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzZXRybWdteW5tcmViaXdra3lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyMDQyOTEsImV4cCI6MjA3Nzc4MDI5MX0.DFs9aID-cp693Ow5cwE-GF9cGLtIZQ761z2cCp8dlxw";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ===================== VARIÁVEIS DO JOGO =====================
 let perguntas = [
   {
-    pergunta: "Qual é o tipo de dado que representa valores verdadeiros e falsos?",
+    pergunta:
+      "Qual é o tipo de dado que representa valores verdadeiros e falsos?",
     alternativas: ["int", "bool", "float", "string"],
     correta: "bool",
-    pontos: 10
+    pontos: 10,
   },
   {
-    pergunta: "Qual operador lógico retorna verdadeiro apenas se todas as condições forem verdadeiras?",
+    pergunta:
+      "Qual operador lógico retorna verdadeiro apenas se todas as condições forem verdadeiras?",
     alternativas: ["AND", "OR", "NOT", "IF"],
     correta: "AND",
-    pontos: 20
+    pontos: 20,
   },
   {
-    pergunta: "Em JavaScript, qual palavra-chave é usada para declarar uma variável de escopo de bloco?",
+    pergunta:
+      "Em JavaScript, qual palavra-chave é usada para declarar uma variável de escopo de bloco?",
     alternativas: ["var", "let", "const", "define"],
     correta: "let",
-    pontos: 30
-  }
+    pontos: 30,
+  },
 ];
 
 let indicePergunta = 0;
@@ -45,16 +49,19 @@ const endScreen = document.getElementById("end-screen");
 const playAgainBtn = document.getElementById("play-again-btn");
 const backHomeBtn = document.getElementById("back-home-btn");
 
+// ===================== CONTROLE DE TELAS =====================
+const startScreen = document.getElementById("start-screen");
+const nameScreen = document.getElementById("name-screen");
+const gameContainer = document.getElementById("game-container");
+
 // ===================== INICIALIZAÇÃO =====================
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("start-btn");
   const confirmNameBtn = document.getElementById("confirm-name-btn");
   const nameInput = document.getElementById("player-name");
-  const startScreen = document.getElementById("start-screen");
-  const nameScreen = document.getElementById("name-screen");
   const backBtn = document.getElementById("back-btn");
 
-  // === Clicar em "Começar a Aventura" mostra a tela de nome ===
+  // ---- Botão "Começar Aventura"
   if (startBtn) {
     startBtn.addEventListener("click", () => {
       startScreen.classList.add("hidden");
@@ -63,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === Clicar em "Voltar" retorna à tela inicial ===
+  // ---- Botão "Voltar" na tela de nome
   if (backBtn) {
     backBtn.addEventListener("click", () => {
       nameScreen.classList.add("hidden");
@@ -72,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === Confirmar nome do jogador ===
+  // ---- Confirmar nome e iniciar jogo
   if (confirmNameBtn) {
     confirmNameBtn.addEventListener("click", () => {
       jogador = nameInput.value.trim();
@@ -80,12 +87,11 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Por favor, digite seu nome!");
         return;
       }
-      nameScreen.classList.add("hidden");
       iniciarJogo();
     });
   }
 
-  // === Jogar novamente ===
+  // ---- Botão "Jogar novamente"
   if (playAgainBtn) {
     playAgainBtn.addEventListener("click", () => {
       indicePergunta = 0;
@@ -96,28 +102,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === Voltar ao início após o fim do jogo ===
+  // ---- Botão "Voltar ao início"
   if (backHomeBtn) {
     backHomeBtn.addEventListener("click", () => {
       endScreen.classList.add("hidden");
       startScreen.classList.remove("hidden");
+      startScreen.style.display = "flex";
     });
   }
 
-  // === Exibe o ranking assim que carregar ===
   exibirRanking();
 });
 
 // ===================== LÓGICA PRINCIPAL =====================
 function iniciarJogo() {
-  document.getElementById("name-screen").classList.add("hidden");
-  const gameContainer = document.getElementById("game-container");
+  nameScreen.classList.add("hidden");
   gameContainer.classList.remove("hidden");
-  gameContainer.style.display = "flex"; // 👈 garante que apareça
+  gameContainer.style.display = "flex";
   carregarPergunta();
   atualizarUI();
 }
-
 
 function carregarPergunta() {
   const pergunta = perguntas[indicePergunta];
@@ -127,7 +131,7 @@ function carregarPergunta() {
   optionsGrid.innerHTML = "";
   feedbackMessage.textContent = "";
 
-  pergunta.alternativas.forEach(alternativa => {
+  pergunta.alternativas.forEach((alternativa) => {
     const botao = document.createElement("button");
     botao.className = "option-btn";
     botao.textContent = alternativa;
@@ -139,7 +143,7 @@ function carregarPergunta() {
 function verificarResposta(botao, pergunta) {
   const resposta = botao.textContent;
   const botoes = document.querySelectorAll(".option-btn");
-  botoes.forEach(b => (b.disabled = true));
+  botoes.forEach((b) => (b.disabled = true));
 
   if (resposta === pergunta.correta) {
     botao.classList.add("correct");
@@ -162,7 +166,8 @@ function verificarResposta(botao, pergunta) {
 }
 
 function embaralharAlternativas(pergunta) {
-  feedbackMessage.textContent = "🌀 Tentativa extra! As alternativas foram embaralhadas.";
+  feedbackMessage.textContent =
+    "🌀 Tentativa extra! As alternativas foram embaralhadas.";
   setTimeout(() => {
     pergunta.alternativas.sort(() => Math.random() - 0.5);
     carregarPergunta();
@@ -190,8 +195,9 @@ function atualizarUI() {
 
 // ===================== FINAL DE JOGO =====================
 async function finalizarJogo() {
-  document.getElementById("game-container").classList.add("hidden");
+  gameContainer.classList.add("hidden");
   endScreen.classList.remove("hidden");
+  endScreen.style.display = "flex";
 
   const estrelas = pontuacao >= 60 ? 3 : pontuacao >= 30 ? 2 : 1;
   totalEstrelas = estrelas;
@@ -217,14 +223,13 @@ async function salvarPontuacao(nome, estrelas, pontos) {
   if (existente) {
     const novasEstrelas = existente.estrelas + estrelas;
     const novosPontos = (existente.pontos || 0) + pontos;
-
     await supabase
       .from("ranking")
       .update({ estrelas: novasEstrelas, pontos: novosPontos })
       .eq("id", existente.id);
   } else {
     await supabase.from("ranking").insert([
-      { nome, estrelas, pontos, nivel: "Jogador", criado_em: new Date() }
+      { nome, estrelas, pontos, nivel: "Jogador", criado_em: new Date() },
     ]);
   }
 }
@@ -233,7 +238,7 @@ async function exibirRanking() {
   const { data, error } = await supabase
     .from("ranking")
     .select("*")
-    .order("pontos", { ascending: false })
+    .order("estrelas", { ascending: false })
     .limit(10);
 
   if (error) {
@@ -243,12 +248,14 @@ async function exibirRanking() {
   }
 
   rankingList.innerHTML = "";
-  data.forEach(jogador => {
+  data.forEach((jogador) => {
     const item = document.createElement("li");
     item.innerHTML = `
       <div class="ranking-item">
         <span class="ranking-name">${jogador.nome}</span>
-        <span class="ranking-stars">⭐ ${jogador.estrelas} | ${jogador.pontos} pts</span>
+        <span class="ranking-stars">${"⭐".repeat(
+          jogador.estrelas
+        )}</span>
       </div>
     `;
     rankingList.appendChild(item);

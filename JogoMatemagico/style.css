@@ -3,6 +3,21 @@
   cursor: url('varinha.png') 16 16, auto !important; /*Theo - ponteiro de varinha magica*/
 }
 
+#start-screen,
+#name-screen,
+#game-container,
+#end-screen {
+  display: none;
+}
+
+#start-screen:not(.hidden),
+#name-screen:not(.hidden),
+#game-container:not(.hidden),
+#end-screen:not(.hidden) {
+  display: flex;
+}
+
+
 /* ===============================
    Tela de carregamento
    (⚠️ Importante: a regra abaixo garante que a classe .hidden funcione mesmo com #loading-screen)

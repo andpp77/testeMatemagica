@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     startBtn.addEventListener("click", () => {
       startScreen.classList.add("hidden");
       nameScreen.classList.remove("hidden");
+      nameScreen.style.display = "flex";
     });
   }
 
@@ -67,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     backBtn.addEventListener("click", () => {
       nameScreen.classList.add("hidden");
       startScreen.classList.remove("hidden");
+      startScreen.style.display = "flex";
     });
   }
 

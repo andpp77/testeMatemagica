@@ -110,10 +110,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ===================== LÓGICA PRINCIPAL =====================
 function iniciarJogo() {
-  document.getElementById("game-container").classList.remove("hidden");
+  document.getElementById("name-screen").classList.add("hidden");
+  const gameContainer = document.getElementById("game-container");
+  gameContainer.classList.remove("hidden");
+  gameContainer.style.display = "flex"; // 👈 garante que apareça
   carregarPergunta();
   atualizarUI();
 }
+
 
 function carregarPergunta() {
   const pergunta = perguntas[indicePergunta];

@@ -47,9 +47,30 @@ const backHomeBtn = document.getElementById("back-home-btn");
 
 // ===================== INICIALIZAÇÃO =====================
 document.addEventListener("DOMContentLoaded", () => {
+  const startBtn = document.getElementById("start-btn");
   const confirmNameBtn = document.getElementById("confirm-name-btn");
   const nameInput = document.getElementById("player-name");
+  const startScreen = document.getElementById("start-screen");
+  const nameScreen = document.getElementById("name-screen");
+  const backBtn = document.getElementById("back-btn");
 
+  // === Clicar em "Começar a Aventura" mostra a tela de nome ===
+  if (startBtn) {
+    startBtn.addEventListener("click", () => {
+      startScreen.classList.add("hidden");
+      nameScreen.classList.remove("hidden");
+    });
+  }
+
+  // === Clicar em "Voltar" retorna à tela inicial ===
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      nameScreen.classList.add("hidden");
+      startScreen.classList.remove("hidden");
+    });
+  }
+
+  // === Confirmar nome do jogador ===
   if (confirmNameBtn) {
     confirmNameBtn.addEventListener("click", () => {
       jogador = nameInput.value.trim();
@@ -57,10 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Por favor, digite seu nome!");
         return;
       }
+      nameScreen.classList.add("hidden");
       iniciarJogo();
     });
   }
 
+  // === Jogar novamente ===
   if (playAgainBtn) {
     playAgainBtn.addEventListener("click", () => {
       indicePergunta = 0;
@@ -71,13 +94,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // === Voltar ao início após o fim do jogo ===
   if (backHomeBtn) {
     backHomeBtn.addEventListener("click", () => {
       endScreen.classList.add("hidden");
-      document.getElementById("start-screen").classList.remove("hidden");
+      startScreen.classList.remove("hidden");
     });
   }
 
+  // === Exibe o ranking assim que carregar ===
   exibirRanking();
 });
 

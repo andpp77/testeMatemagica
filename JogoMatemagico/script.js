@@ -218,3 +218,13 @@ async function exibirRanking() {
     rankingList.appendChild(item);
   });
 }
+  await fetch('/api/ranking', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    nome: playerName,
+    estrelas: stars,
+    pontos: score, // 👈 envia os pontos da partida
+    nivel: "Normal" // ou o nível que quiser mostrar
+  }),
+});

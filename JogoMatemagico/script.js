@@ -38,7 +38,6 @@ const feedbackMessage = document.getElementById("feedback-message");
 const scoreDisplay = document.getElementById("score");
 const finalScoreDisplay = document.getElementById("final-score");
 const rankingList = document.getElementById("ranking-list");
-const starsContainer = document.getElementById("stars");
 const currentPlayerName = document.getElementById("current-player-name");
 const currentPlayerLevel = document.getElementById("current-player-level");
 const currentPlayerStars = document.getElementById("current-player-stars");
@@ -48,7 +47,6 @@ const backHomeBtn = document.getElementById("back-home-btn");
 
 // ===================== INICIALIZAÇÃO =====================
 document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.getElementById("start-btn");
   const confirmNameBtn = document.getElementById("confirm-name-btn");
   const nameInput = document.getElementById("player-name");
 
@@ -173,12 +171,12 @@ async function finalizarJogo() {
   currentPlayerLevel.textContent = `Pontuação total: ${pontuacao}`;
   currentPlayerStars.innerHTML = "⭐".repeat(estrelas);
 
-  await salvarPontuacao(jogador, estrelas);
+  await salvarPontuacao(jogador, estrelas, pontuacao);
   exibirRanking();
 }
 
 // ===================== SUPABASE =====================
-async function salvarPontuacao(nome, estrelas) {
+async function salvarPontuacao(nome, estrelas, pontos) {
   const { data: existente } = await supabase
     .from("ranking")
     .select("*")
@@ -187,9 +185,16 @@ async function salvarPontuacao(nome, estrelas) {
 
   if (existente) {
     const novasEstrelas = existente.estrelas + estrelas;
-    await supabase.from("ranking").update({ estrelas: novasEstrelas }).eq("id", existente.id);
+    const novosPontos = (existente.pontos || 0) + pontos;
+
+    await supabase
+      .from("ranking")
+      .update({ estrelas: novasEstrelas, pontos: novosPontos })
+      .eq("id", existente.id);
   } else {
-    await supabase.from("ranking").insert([{ nome, estrelas, nivel: "Jogador", criado_em: new Date() }]);
+    await supabase.from("ranking").insert([
+      { nome, estrelas, pontos, nivel: "Jogador", criado_em: new Date() }
+    ]);
   }
 }
 
@@ -197,7 +202,7 @@ async function exibirRanking() {
   const { data, error } = await supabase
     .from("ranking")
     .select("*")
-    .order("estrelas", { ascending: false })
+    .order("pontos", { ascending: false })
     .limit(10);
 
   if (error) {
@@ -212,19 +217,9 @@ async function exibirRanking() {
     item.innerHTML = `
       <div class="ranking-item">
         <span class="ranking-name">${jogador.nome}</span>
-        <span class="ranking-stars">${"⭐".repeat(jogador.estrelas)}</span>
+        <span class="ranking-stars">⭐ ${jogador.estrelas} | ${jogador.pontos} pts</span>
       </div>
     `;
     rankingList.appendChild(item);
   });
 }
-  await fetch('/api/ranking', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    nome: playerName,
-    estrelas: stars,
-    pontos: score, // 👈 envia os pontos da partida
-    nivel: "Normal" // ou o nível que quiser mostrar
-  }),
-});
